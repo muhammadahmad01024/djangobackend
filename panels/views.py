@@ -11,7 +11,7 @@ import urllib.request
 # Create your views here.
 ec2IP = str(urllib.request.urlopen("http://169.254.169.254/latest/meta-data/public-ipv4").read().decode("utf-8"))
 requests.get(f'http://ahmado1024.pythonanywhere.com/setServerIp?ip={ec2IP}')
-print("IP Shared")
+print("IP Shared", ec2IP)
 commonAttributes = {
     'id': 1,
     'topOffset': None,
@@ -22,12 +22,21 @@ commonAttributes = {
     'exportButton': True,
 }
 
+modelsReference = {
+    'REPORTING': Reporting,
+    'ISSUE LOG': IssueLog,
+    'FINANCIAL CRIME': FinancialCrime,
+    'News': News,
+    'Upcoming Regulations': UpcomingRegulations,
+}
+
+
 @api_view(['POST'])
 def getPanels(request):
     headers = Headers.objects.all()
 
     reporting = commonAttributes.copy()
-    reporting['id'], reporting['name'] = 1, 'REPORTIN'
+    reporting['id'], reporting['name'] = 1, 'REPORTING'
     reporting['records'] = [row.data for row in Reporting.objects.all()[:15]]
     reporting['attributes'] = [header.data for header in headers if 'reporting' in header.data][0]
 
@@ -48,7 +57,7 @@ def getPanels(request):
 
     upcomingRegulations = commonAttributes.copy()
     upcomingRegulations['id'], upcomingRegulations['name'] = 4, 'Upcoming Regulations'
-    upcomingRegulations['records'] = [row.data for row in News.objects.all()[:10]]
+    upcomingRegulations['records'] = [row.data for row in UpcomingRegulations.objects.all()[:10]]
     upcomingRegulations['attributes'] = [header.data for header in headers if 'upcomingregulations' in header.data][0]
 
     state = {
@@ -60,6 +69,16 @@ def getPanels(request):
     }
 
     return Response(state)
+
+@api_view(['POST'])
+def getPanel(request):
+    obj = modelsReference[request.data.get('panelName')]
+    pageNumber = int(request.data.get('pageNumber')) - 1
+    pageSize = int(request.data.get('pageSize'))
+
+    startingRow = pageNumber * 10
+    endingRow = startingRow + pageSize
+    return Response([row.data for row in obj.objects.all()[startingRow:endingRow]])
 
 
 @api_view(['POST'])
@@ -93,7 +112,7 @@ def deleteComment(request):
     return Response({'Status': 'Delete'})
 
 
-@api_view(['POST','GET'])
+@api_view(['POST', 'GET'])
 def getPDF(request):
     # id = int(request.data.get('id'))
     pdf = open('MuhammadAhmad_Resume.pdf', 'rb')
