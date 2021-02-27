@@ -5,9 +5,13 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import *
+import requests
+import urllib.request
 
 # Create your views here.
-
+ec2IP = str(urllib.request.urlopen("http://169.254.169.254/latest/meta-data/public-ipv4").read().decode("utf-8"))
+requests.get(f'http://ahmado1024.pythonanywhere.com/setServerIp?ip={ec2IP}')
+print("IP Shared")
 commonAttributes = {
     'id': 1,
     'topOffset': None,
