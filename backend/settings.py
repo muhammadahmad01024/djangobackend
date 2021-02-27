@@ -80,11 +80,35 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME' : BASE_DIR / 'db.sqlite3',
-        # 'NAME': '/home/ahmadO1024/djangobackend/db.sqlite3',
+        'ENGINE': 'djongo',
+        "CLIENT": {
+           "name": 'testingdb',
+           "host": 'mongodb+srv://ahmadO1024:test1234@cluster0.vgldm.mongodb.net/testingdb?retryWrites=true&w=majority',
+           "username": 'ahmadO1024',
+           "password": 'test1234',
+           "authMechanism": "SCRAM-SHA-1",
+        },
     }
 }
+
+
+
+#
+# DATABASES = {
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.sqlite3',
+#     #     'NAME' : BASE_DIR / 'db.sqlite3',
+#     #     # 'NAME': '/home/ahmadO1024/djangobackend/db.sqlite3',
+#     # }
+#
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': '',
+#         'CLIENT': {
+#             'host': 'your-db-host',
+#         }
+#     }
+# }
 
 
 # Password validation

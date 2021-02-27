@@ -1,3 +1,4 @@
+from jsonfield import JSONField
 from django.db import models
 
 
@@ -7,3 +8,27 @@ class PanelComments(models.Model):
     panelName = models.CharField(max_length=200)
     rowId = models.IntegerField()
     commentText = models.CharField(max_length=2000)
+
+
+class Headers(models.Model):
+    data = JSONField(max_length=100000000)
+
+
+class Reporting(models.Model):
+    data = JSONField(max_length=100000000)
+
+
+class IssueLog(models.Model):
+    data = JSONField(max_length=100000000)
+
+
+class FinancialCrime(models.Model):
+    data = JSONField(max_length=100000000)
+
+
+class News(models.Model):
+    data = JSONField(max_length=100000000)
+
+
+class UpcomingRegulations(models.Model):
+    data = JSONField(max_length=100000000)
